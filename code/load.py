@@ -20,13 +20,19 @@ import matplotlib.pyplot as plt
 from sklearn.utils import shuffle
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import fetch_mldata
-import urllib2
+#import urllib2
+import urllib.request as urllib2
 import Params
+import tensorflow as tf
+old_v = tf.logging.get_verbosity()
+tf.logging.set_verbosity(tf.logging.ERROR)
+from tensorflow.examples.tutorials.mnist import input_data
 
 ''' prepare dataset '''
 
 def load_mnist(params):
-    mnist = fetch_mldata('MNIST original')
+#    mnist = fetch_mldata('MNIST original')
+    mnist = input_data.read_data_sets('MNIST_data', one_hot=True)
     mnist_X, mnist_y = shuffle(mnist.data, mnist.target, random_state=params.random_seed)
     mnist_X = mnist_X / 255.0
 
@@ -49,7 +55,7 @@ def load_mnist(params):
 
     time_steps = 28*28
     if params.dataset.startswith("mnist.permute"):
-        print "permuate MNIST"
+        print("permuate MNIST")
         mnist_X = mnist_X.reshape((-1, time_steps))
         perm = np.random.permutation(time_steps)
         for i in xrange(len(mnist_X)):
@@ -59,15 +65,15 @@ def load_mnist(params):
     else:
         if len(params.dataset) > len("mnist."): # mnist.xx
             time_steps = int(params.dataset[len("mnist."):])
-    print "time_steps = ", time_steps
+    print("time_steps = ", time_steps)
     mnist_X = mnist_X.reshape((-1, time_steps, 28*28/time_steps))
     #mnist_X = flatten_img(mnist_X) # X.shape => (n_samples, seq_len)
-    print "mnist_X.shape = ", mnist_X.shape
+    print("mnist_X.shape = ", mnist_X.shape)
     #mnist_X = mnist_X[:, :, np.newaxis] # X.shape => (n_samples, seq_len, n_features)
     mnist_y_one_hot = np.zeros((mnist_y.shape[0], 10))
     for i in xrange(len(mnist_y)):
         mnist_y_one_hot[i][mnist_y[i]] = 1
-    print "mnist_y.shape = ", mnist_y_one_hot.shape
+    print("mnist_y.shape = ", mnist_y_one_hot.shape)
 
     # split to training and testing set 
     train_X, test_X, train_y, test_y = train_test_split(mnist_X, mnist_y_one_hot,
@@ -110,7 +116,7 @@ def load_sine_synthetic(params):
                     plt.ylabel('sequence value')
                     plt.savefig("log/sin_nfreq%d_npoly%d.png" % (nfreqs, n_poly))
             except:
-                print "failed to plot"
+                print("failed to plot")
         dataX.append(x)
     dataX = np.array(dataX).reshape((-1, seq_len, 1))
     dataY = dataX[:, 1:, :].reshape((-1, seq_len-1))
@@ -138,7 +144,7 @@ def load_poly_synthetic(params):
     degrees = np.arange(1,degree+1)
     coefficients = np.random.uniform(-1, 1, size=(n_poly,degree))
 
-    print coefficients
+    print(coefficients)
 
     curves = np.zeros((n_poly, seq_len))
     for j in range(n_poly):
@@ -164,7 +170,7 @@ def load_poly_synthetic(params):
                     plt.ylabel('sequence value')
                     plt.savefig("log/poly%d.png" % (n_poly))
             except:
-                print "failed to plot orginal curve"
+                print("failed to plot orginal curve")
         dataX.append(x)
     #plt.show()
     #exit()

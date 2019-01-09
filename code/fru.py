@@ -45,7 +45,7 @@ class FRUCell(tf.contrib.rnn.RNNCell):
         self._freqs_array = freqs 
         self._nfreqs = len(freqs)
         self._freqs_mask_array = [0.0 if w == 0 and len(freqs) > 1 else freqs_mask for w in freqs]
-        print "frequency_mask = ", self._freqs_mask_array
+        print("frequency_mask = ", self._freqs_mask_array)
         self._summarize = summarize
         self._linear_out = linear_out
         self._activation = activation

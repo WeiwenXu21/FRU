@@ -32,7 +32,7 @@ def train(params):
     #params.freqs.append(0.0)
     #params.freqs.sort()
     #params.freqs = np.linspace(0, params.time_steps/3, 10).tolist()
-    print "parameters = ", params 
+    print("parameters = ", params)
 
     model = rnn.RNNModel(params)
 
@@ -86,7 +86,7 @@ def train(params):
 if __name__=='__main__':
     if len(sys.argv) < 2:
         print("input parameters in json format in required")
-        exit() 
+        exit()
     paramsArray = []
     for i in range(1, len(sys.argv)):
         params = Params.Params()
@@ -95,6 +95,7 @@ if __name__=='__main__':
     print("parameters[%d] = %s" % (len(paramsArray), paramsArray))
 
     tt = time.time()
-    for params in paramsArray: 
+    for params in paramsArray:
         train(params)
     print("program takes %.3f seconds" % (time.time()-tt))
+

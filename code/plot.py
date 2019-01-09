@@ -17,7 +17,7 @@ from matplotlib import ticker
 from matplotlib import cm 
 
 def read(filename): 
-    print "read ", filename 
+    print("read ", filename)
     train_data = []
     test_data = []
     with open(filename, "r") as f: 
@@ -47,7 +47,7 @@ def read(filename):
     return train_data, test_data
 
 def read_tflearn(filename): 
-    print "read ", filename 
+    print("read ", filename)
     train_data = []
     test_data = []
     with open(filename, "r") as f: 
@@ -68,7 +68,7 @@ def read_tflearn(filename):
     return test_data
 
 def read_gradient(filename): 
-    print "read ", filename 
+    print("read ", filename)
     grad_data = []
     with open(filename, "r") as f: 
         count = 0
@@ -95,7 +95,7 @@ def read_gradient(filename):
     return grad_data
 
 def read_gradient_time(filename): 
-    print "read ", filename 
+    print("read ", filename)
     grad_data = {}
     with open(filename, "r") as f: 
         for line in f:
@@ -398,7 +398,7 @@ elif dataset.startswith("poly_synthetic"):
         plt.subplots_adjust()
         #plt.tight_layout()
         filename = "./repeat.5/poly_synthetic.%s.grads_time.pdf" % (folder)
-        print filename
+        print(filename)
         plt.savefig(filename, bbox_inches='tight', pad_inches=0.0)
 
 elif dataset.startswith("sine_synthetic"): 
@@ -469,5 +469,5 @@ elif dataset.startswith("sine_synthetic"):
 
     plt.tight_layout()
     filename = "./repeat/%s.grads.png" % (dataset)
-    print filename
+    print(filename)
     plt.savefig(filename, bbox_inches='tight', pad_inches=0.0)

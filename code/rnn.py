@@ -78,7 +78,7 @@ class RNNModel (object):
 
     def set_cell(self, params): 
         cells = []
-        for layer in xrange(params.num_layers): 
+        for layer in range(params.num_layers):
             if params.cell == "RNN": 
                 cell = tf.contrib.rnn.BasicRNNCell(
                         num_units=params.num_units
@@ -118,12 +118,12 @@ class RNNModel (object):
         else:
             self.rnn_cell = cells[0]
 
-        print "num_layers = ", params.num_layers
+        print("num_layers = ", params.num_layers)
 
     def count_trainable_variables(self): 
-        print "trainable_variables"
+        print("trainable_variables")
         for var in tf.trainable_variables():
-            print var 
+            print(var)
         # summarize #vars 
         num_vars = 0 
         for var in tf.trainable_variables(): 
@@ -131,7 +131,7 @@ class RNNModel (object):
             for dim in var.get_shape(): 
                 num *= dim.value 
             num_vars += num 
-        print "# trainable_variables = ", num_vars 
+        print("# trainable_variables = ", num_vars)
 
     def build(self, params): 
         self.set_cell(params)
@@ -177,8 +177,8 @@ class RNNModel (object):
             output, states = tf.contrib.rnn.static_rnn(self.rnn_cell, x, dtype=np.float32)
         # linear activation, using rnn inner loop last output 
         logits = tf.matmul(output[-1], last_w) + last_b
-        print "output[-1].shape = ", output[-1].get_shape() 
-        print "last_w.shape = ", last_w.get_shape()
+        print("output[-1].shape = ", output[-1].get_shape())
+        print("last_w.shape = ", last_w.get_shape())
 
         self.count_trainable_variables()
 
@@ -206,7 +206,7 @@ class RNNModel (object):
             initial_state_grads = []
             if params.regression_flag: 
                 for gi in range(0, params.output_size, 20): 
-                    print gi 
+                    print(gi)
                     if isinstance(self.initial_state, tf.contrib.rnn.LSTMStateTuple): 
                         #initial_state_grads = [tf.gradients(self.loss_op, self.initial_state.h), tf.gradients(self.loss_op, self.initial_state.c)]
                         initial_state_grads.append([tf.gradients(tf.reduce_mean(tf.pow(self.pred[:, gi:min(gi+20, params.output_size)]-self.y[:, gi:min(gi+20, params.output_size)], 2)), self.initial_state.h), tf.gradients(tf.reduce_mean(tf.pow(self.pred[:, gi:min(gi+20, params.output_size)]-self.y[:, gi:min(gi+20, params.output_size)], 2)), self.initial_state.c)])
@@ -229,12 +229,12 @@ class RNNModel (object):
 
         if params.compute_initial_state_grad: 
             initial_weights = self.session.run(tf.trainable_variables())
-            print "initial_weights shape = ", len(initial_weights)
+            print("initial_weights shape = ", len(initial_weights))
             opt = np.get_printoptions()
             np.set_printoptions(threshold='nan')
             for index, weights in enumerate(initial_weights): 
-                print "initial_weights[%d] shape = %s" % (index, weights.shape)
-                print weights
+                print("initial_weights[%d] shape = %s" % (index, weights.shape))
+                print(weights)
             np.set_printoptions(**opt)
 
         # only initialize if not train 
@@ -279,13 +279,13 @@ class RNNModel (object):
                         l2_norm = np.linalg.norm(initial_state_grads_value, ord=None)
                         linf_norm = np.linalg.norm(initial_state_grads_value, ord=np.inf)
                         lninf_norm = np.linalg.norm(initial_state_grads_value, ord=-np.inf)
-                        print "initial_state_grads_values[%d] l1 = %.6f, l2 = %.6f, linf = %.6f, lninf = %.6f" % (
+                        print("initial_state_grads_values[%d] l1 = %.6f, l2 = %.6f, linf = %.6f, lninf = %.6f" % (
                                 gi, 
                                 l1_norm, 
                                 l2_norm, 
                                 linf_norm, 
                                 lninf_norm
-                                )
+                                ))
                 else:
                     self.session.run(train_op, feed_dict=feed_dict)
                 batch_index += 1
@@ -365,7 +365,7 @@ class RNNModel (object):
     @param filename file name 
     """
     def save(self, filename): 
-        print "save model ", filename
+        print("save model ", filename)
 
         #def check_diagonal_dominated(x):
         #    d = np.diag(np.abs(x))
@@ -398,7 +398,7 @@ class RNNModel (object):
     @param filename model file name 
     """
     def load(self, filename): 
-        print "load model ", filename
+        print("load model ", filename)
 
         saver = tf.train.Saver()
         saver.restore(self.session, filename)
